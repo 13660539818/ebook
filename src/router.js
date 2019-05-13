@@ -9,6 +9,14 @@ export default new Router({
       path: '/login',
       component: resolve => require(['@/views/login/login.vue'], resolve)
     },
+    {
+      path: '/register',
+      component: resolve => require(['@/views/login/register.vue'], resolve)
+    },
+    {
+      path: '/completeInfo',
+      component: resolve => require(['@/views/login/completeInfo.vue'], resolve)
+    },
     // {
     //   path: '/layout',
     //   component: resolve => require(['@/views/layout/layout.vue'], resolve)

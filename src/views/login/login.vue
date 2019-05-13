@@ -1,14 +1,13 @@
 <template>
   <div id="login-container">
     <div class="navbar">
-      <!-- <span class="icon icon-back" @click="back"></span> -->
       <span class="title-text">登录</span>
     </div>
     <form class="login-form">
       <input
         class="login-form-item"
         type="text"
-        placeholder="账号"
+        placeholder="手机号"
         v-model="username"
       >
       <input
@@ -17,8 +16,12 @@
         placeholder="密码"
         v-model="password"
       >
-      <button class="login-button" @click="login">登录</button>
+      <button
+        class="login-button"
+        @click="login"
+      >登录</button>
     </form>
+    <p>还没有账号？<span @click="goRegister">去注册</span></p>
   </div>
 </template>
 
@@ -31,14 +34,16 @@ export default {
     }
   },
   methods: {
-    back() {
-      this.$router.go(-1)
-    },
     login () {
       if (this.username && this.password) {
         sessionStorage.setItem('username', this.username)
         this.$router.push({ path: '/book-store/shelf' })
+      } else {
+        console.log('请输入手机号和密码')
       }
+    },
+    goRegister () {
+      this.$router.push({ path: '/register' })
     }
   }
 }
@@ -74,7 +79,7 @@ export default {
   }
   .login-form {
     width: px2rem(200);
-    margin: px2rem(200) auto;
+    margin: px2rem(200) auto 0;
     .login-form-item {
       display: block;
       outline: none;
@@ -98,6 +103,18 @@ export default {
       display: block;
       font-size: px2rem(14);
       margin-top: px2rem(20);
+      cursor: pointer;
+    }
+  }
+  p {
+    width: 380px;
+    text-align: center;
+    font-size: px2rem(14);
+    color: #666;
+    margin: px2rem(10) auto;
+    span {
+      color: #346cb9;
+      text-decoration: underline;
       cursor: pointer;
     }
   }
