@@ -1,7 +1,7 @@
 <template>
   <div class="book-shelf">
     <shelf-title class="shelf-title"
-                 :title="书架"
+                 title="书架"
                  :isEditMode.sync="isEditMode"
                  :data="bookList"
                  :ifShowBack="ifShowBack"
@@ -27,7 +27,7 @@
                   :isEditMode="isEditMode"
                   @onBookClick="onBookClick"
                   ref="bookShelf"
-                  v-if="!isDataEmpty"></book-shelf>
+                  ></book-shelf>
       <!-- <book-shelf-empty
                   class="book-shelf-empty"
                   v-if="isDataEmpty"></book-shelf-empty> -->

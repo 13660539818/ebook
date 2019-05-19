@@ -1,14 +1,7 @@
 <template>
   <div class="book-shelf-empty-wrapper" ref="emptyView">
-    <div class="empty-img-wrapper">
-      <img class="empty-img" :src="img">
-    </div>
-    <div class="empty-text-wrapper">
-      <div class="empty-text" v-html="$t('shelf.welcome')"></div>
-    </div>
     <div class="empty-btn-wrapper">
-      <div class="empty-btn" @click="gotoStudy">{{$t('shelf.studyNow')}}</div>
-      <div class="empty-btn" @click="gotoBookStore">{{$t('shelf.find')}}</div>
+      <div class="empty-btn" @click="gotoBookStore">去找书</div>
     </div>
   </div>
 </template>
@@ -68,7 +61,7 @@
       box-sizing: border-box;
       @include center;
       .empty-btn {
-        width: 100%;
+        width: 40%;
         font-size: px2rem(14);
         font-weight: bold;
         color: white;
@@ -78,7 +71,8 @@
         background: $color-blue;
         &:first-child {
           margin-right: px2rem(7.5);
-          background: #C9394A;
+          background: #346cb9;
+          margin-top: px2rem(150);
         }
         &:last-child {
           margin-left: px2rem(7.5);

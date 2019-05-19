@@ -8,66 +8,127 @@
         >
           <span class="icon-back"></span>
         </div>
-        <div class="title-text">注册</div>
+        <div class="title-text">个人信息</div>
       </div>
     </div>
     <form class="info-form">
+      <div class="form-item avatar">
+        <label class="form-label">头像</label>
+        <div class="logo">
+          <img :src="avatarUrl" alt="">
+          <p v-if="!avatarUrl">上传头像</p>
+        </div>
+        <div class="upload">
+            <input class="form-input form-avatar" style="opacity: 0;" type="file" accept=".png,.jpg,.jpeg,.gif" @change="avatarUpload" ref="upload">
+        </div>
+      </div>
       <div class="form-item">
-        <label class="form-label">账号</label>
+        <label class="form-label">昵称</label>
         <input
-          class="form-input"
+          class="form-input form-nickname"
           type="text"
-          placeholder="手机号"
-          v-model="username"
+          placeholder="请输入昵称"
+          v-model="form.nickname"
         >
       </div>
-      <input
-        class="form-input"
-        type="passenger"
-        placeholder="密码"
-        v-model="password"
-      >
-      <input
-        class="form-input"
-        type="passenger"
-        placeholder="确认密码"
-        v-model="confirmPassword"
-      >
-      <button
-        class="info-button"
-        @click="info"
-      >注册</button>
+      <div class="form-item">
+        <label class="form-label">性别</label>
+          <div class="form-input">
+            <input type="radio" name="sex" value="男" v-model="form.sex">男
+            <input type="radio" name="sex" value="女" v-model="form.sex">女
+          </div>
+      </div>
+      <div class="form-item">
+        <label class="form-label">出生日期</label>
+        <input type="date" class="form-input form-birth" value="2019-01-01" v-model="form.birth">
+      </div>
+      <div class="form-item">
+        <label class="form-label">个人简介</label>
+        <textarea cols="25" rows="5" placeholder="个人简介" class="form-input form-intro" v-model="form.intro">
+        </textarea>
+      </div>
     </form>
-    <p>已有账号？<span @click="goinfo">去登录</span></p>
+    <button
+        class="info-button"
+        @click="saveInfo"
+      >保存</button>
+      <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script>
+import { completeInfo, upload, userInfo } from '@/api/book'
+import toast from '@/components/shelf/toast'
+import moment from 'moment'
 export default {
+  components: { toast },
   data () {
     return {
-      username: '',
-      password: '',
-      confirmPassword: ''
+      form: {
+        id: '',
+        nickname: '',
+        sex: '',
+        birth: '',
+        intro: '',
+        avatar: ''
+      },
+      avatarUrl: '',
+      toastText: ''
     }
   },
   methods: {
     back() {
       this.$router.go(-1)
     },
-    info () {
-      if (this.username && this.password && this.confirmPassword) {
-        if (this.password === this.confirmPassword) {
-          // TODO: 注册
+    saveInfo () {
+      this.form.id = JSON.parse(sessionStorage.getItem('userInfo')).id
+      completeInfo(this.form).then(res => {
+        this.showToast(res.data.msg)
+        if (res.data.error_code === 0) {
+          console.log(res.data)
+          if (sessionStorage.getItem('userInfo')) {
+            this.$router.push({ path: '/mine' })
+          } else {
+            this.$router.push({ path: '/login' })
+          }
         }
-        this.$router.push({ path: '/completeInfo' })
-      } else {
-        console.log('请输入手机号和密码')
-      }
+      })
     },
-    goinfo () {
-      this.$router.push({ path: '/info' })
+    avatarUpload (e) {
+      let params = new FormData()
+      params.append('file', this.$refs['upload'].files[0])
+      upload(params).then(res => {
+        const avatarUrl = res.data.msg.path.substr(6).replace(/\\/g, '/')
+        this.avatarUrl = process.env.VUE_APP_BASE_URL + avatarUrl
+        this.form.avatar = avatarUrl
+      })
+    },
+    showToast(text) {
+      this.toastText = text
+      this.$refs.toast.show()
+    },
+    getUserInfo () {
+      const id = JSON.parse(sessionStorage.getItem('userInfo')).id
+      userInfo(id).then(res => {
+        console.log(res)
+        if (res.data.error_code === 0) {
+          this.form = res.data.data
+          if (res.data.data.avatar) {
+            this.avatarUrl = process.env.VUE_APP_BASE_URL + this.form.avatar
+          }
+          if (res.data.data.birth) {
+            if (moment(this.form.birth).format('YYYY-MM-DD') === 'Invalid date') {
+              this.form.birth = ''
+              return
+            }
+            this.form.birth = moment(this.form.birth).format('YYYY-MM-DD')
+          }
+        }
+      })
     }
+  },
+  mounted () {
+    this.getUserInfo()
   }
 }
 </script>
@@ -78,6 +139,7 @@ export default {
   background-color: #fff;
   height: 100%;
   overflow: hidden;
+  position: relative;
   .navbar {
     width: 100%;
     font-size: px2rem(16);
@@ -121,45 +183,93 @@ export default {
     }
   }
   .info-form {
-    width: px2rem(200);
-    margin: px2rem(150) auto 0;
-    .form-input {
-      display: block;
-      outline: none;
-      border: px2rem(1) solid #346cb9;
-      border-radius: px2rem(20);
-      width: px2rem(200);
-      height: px2rem(40);
-      margin-bottom: px2rem(10);
-      text-indent: px2rem(10);
-      color: #7d8188;
+    width: 100%;
+    font-size: px2rem(18);
+    margin: px2rem(10);
+    .form-item {
+      width: 100%;
+      height: px2rem(48);
+      line-height: px2rem(48);
+      position: relative;
+      .form-input {
+        position: absolute;
+        left: px2rem(100);
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        outline: none;
+        border: 0px;
+        font-size: px2rem(18)
+      }
+      .form-intro {
+        border: 1px solid #ccc;
+        border-radius: px2rem(4);
+        transform: translateY(-10%);
+      }
+      .form-birth {
+        border: 1px solid #ccc;
+        border-radius: px2rem(4);
+      }
+      .form-nickname {
+        border-bottom: 1px solid #ccc;
+        padding: px2rem(10) 0;
+      }
     }
-    .info-button {
-      width: px2rem(200);
-      height: px2rem(40);
-      background-color: #346cb9;
-      color: #fff;
-      text-align: center;
-      border: none;
-      border-radius: px2rem(20);
-      text-decoration: none;
-      display: block;
-      font-size: px2rem(14);
+    .avatar {
+      height: px2rem(96);
+      line-height: px2rem(96);
       margin-top: px2rem(20);
-      cursor: pointer;
+      position: relative;
+      .logo {
+        background-color: #eee;
+        width: px2rem(80);
+        height: px2rem(80);
+        position: absolute;
+        top: 0;
+        left: px2rem(100);
+        img {
+          width: 100%;
+          height: 100%;
+        }
+        p {
+          width: px2rem(80);
+          height: px2rem(80);
+          line-height: px2rem(80);
+          position: absolute;
+          top: 0;
+          text-align: center;
+          color: #666
+        }
+        .upload {
+          width: 80px;
+          height: 18px;
+          line-height: 18px;
+          background: #2fc7c9;
+          text-align: center;
+          color: #FFF;
+          padding: 0px 5px;-webkit-border-radius: 2px;
+          border-radius: 2px;
+        }
+      }
     }
   }
-  p {
-    width: 380px;
+  .info-button {
+    width: px2rem(200);
+    height: px2rem(40);
+    position: absolute;
+    bottom: px2rem(48);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #346cb9;
+    color: #fff;
     text-align: center;
+    border: none;
+    border-radius: px2rem(20);
+    text-decoration: none;
+    display: block;
     font-size: px2rem(14);
-    color: #666;
-    margin: px2rem(10) auto;
-    span {
-      color: #346cb9;
-      text-decoration: underline;
-      cursor: pointer;
-    }
+    margin-top: px2rem(20);
+    cursor: pointer;
   }
 }
 </style>

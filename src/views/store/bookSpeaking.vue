@@ -319,13 +319,16 @@
         return arr
       },
       speak(item, index) {
+        console.log(item)
         this.resetPlay()
         this.playingIndex = index
         this.$nextTick(() => {
           this.$refs.scroll.refresh()
         })
         if (this.chapter) {
+          console.log(this.chapter)
           this.section = this.book.spine.get(this.chapter.href)
+          console.log(this.section)
           this.rendition.display(this.section.href).then(section => {
             const currentPage = this.rendition.currentLocation()
             const cfibase = section.cfiBase
@@ -334,7 +337,6 @@
             this.currentSectionIndex = currentPage.start.displayed.page
             this.currentSectionTotal = currentPage.start.displayed.total
             const cfi = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
-            // console.log(currentPage, cfi, cfibase, cfistart, cfiend)
             this.book.getRange(cfi).then(range => {
               let text = range.toLocaleString()
               text = text.replace(/\s(2,)/g, '')
@@ -344,6 +346,14 @@
               text = text.replace(/\f/g, '')
               this.updateText(text)
             })
+            // const reg = new RegExp('<.+?>', 'g')
+            // let text = section.output.replace(reg, '').replace(/\s\s/g, '')
+            // text = text.replace(/\s(2,)/g, '')
+            // text = text.replace(/\r/g, '')
+            // text = text.replace(/\n/g, '')
+            // text = text.replace(/\t/g, '')
+            // text = text.replace(/\f/g, '')
+            // this.updateText(text)
           })
         }
       },

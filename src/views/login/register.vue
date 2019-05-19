@@ -17,32 +17,38 @@
       >
       <input
         class="register-form-item"
-        type="passenger"
+        type="password"
         placeholder="密码"
         v-model="password"
       >
       <input
         class="register-form-item"
-        type="passenger"
+        type="password"
         placeholder="确认密码"
         v-model="confirmPassword"
       >
-      <button
+    </form>
+    <button
         class="register-button"
         @click="register"
       >注册</button>
-    </form>
-    <p>已有账号？<span @click="goregister">去登录</span></p>
+    <p>已有账号？<span @click="goLogin">去登录</span></p>
+    <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script>
+import { register } from '@/api/book'
+import toast from '@/components/shelf/toast'
 export default {
+  components: { toast },
   data () {
     return {
       username: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      toastText: '',
+      insertId: ''
     }
   },
   methods: {
@@ -50,17 +56,39 @@ export default {
       this.$router.go(-1)
     },
     register () {
+      var telReg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
       if (this.username && this.password && this.confirmPassword) {
-        if (this.password === this.confirmPassword) {
-          // TODO: 注册
+        if (telReg.test(this.username)) {
+          if (this.password === this.confirmPassword) {
+            const params = {
+              account: this.username,
+              password: this.password
+            }
+            register(params).then(res => {
+              if (res.data.error_code === 1) {
+                this.showToast(res.data.msg)
+              }
+              if (res.data.error_code === 0) {
+                this.showToast(res.data.msg)
+                this.$router.push({ path: `/completeInfo/${this.username}` })
+              }
+            })
+          } else {
+            this.showToast('两次输入的密码不一致')
+          }
+        } else {
+          this.showToast('请输入正确的手机号')
         }
-        this.$router.push({ path: '/completeInfo' })
       } else {
-        console.log('请输入手机号和密码')
+        this.showToast('请填写完整')
       }
     },
-    goregister () {
-      this.$router.push({ path: '/register' })
+    goLogin () {
+      this.$router.push({ path: '/login' })
+    },
+    showToast(text) {
+      this.toastText = text
+      this.$refs.toast.show()
     }
   }
 }
@@ -128,27 +156,28 @@ export default {
       text-indent: px2rem(10);
       color: #7d8188;
     }
-    .register-button {
-      width: px2rem(200);
-      height: px2rem(40);
-      background-color: #346cb9;
-      color: #fff;
-      text-align: center;
-      border: none;
-      border-radius: px2rem(20);
-      text-decoration: none;
-      display: block;
-      font-size: px2rem(14);
-      margin-top: px2rem(20);
-      cursor: pointer;
-    }
+  }
+  .register-button {
+    display: block;
+    width: px2rem(200);
+    height: px2rem(40);
+    background-color: #346cb9;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: px2rem(20);
+    text-decoration: none;
+    display: block;
+    font-size: px2rem(14);
+    margin: px2rem(20) auto px2rem(10);
+    cursor: pointer;
   }
   p {
     width: 380px;
     text-align: center;
     font-size: px2rem(14);
     color: #666;
-    margin: px2rem(10) auto;
+    margin: auto;
     span {
       color: #346cb9;
       text-decoration: underline;

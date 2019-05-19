@@ -5,45 +5,67 @@
     </div>
     <form class="login-form">
       <input
+        autocomplete="off"
         class="login-form-item"
         type="text"
         placeholder="手机号"
         v-model="username"
       >
       <input
+        autocomplete="off"
         class="login-form-item"
-        type="passenger"
+        type="password"
         placeholder="密码"
         v-model="password"
       >
-      <button
+    </form>
+     <button
         class="login-button"
         @click="login"
       >登录</button>
-    </form>
     <p>还没有账号？<span @click="goRegister">去注册</span></p>
+    <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script>
+import { login } from '@/api/book'
+import toast from '@/components/shelf/toast'
 export default {
+  components: { toast },
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      toastText: ''
     }
   },
   methods: {
     login () {
       if (this.username && this.password) {
-        sessionStorage.setItem('username', this.username)
-        this.$router.push({ path: '/book-store/shelf' })
+        const params = {
+          account: this.username,
+          password: this.password
+        }
+        login(params).then(res => {
+          if (res.data.error_code === 0) {
+            sessionStorage.setItem('userInfo', JSON.stringify(res.data.data))
+            this.showToast(res.data.msg)
+            this.$router.push({ path: '/book-store/shelf' })
+          } else {
+            this.showToast(res.data.msg)
+          }
+        })
       } else {
-        console.log('请输入手机号和密码')
+        this.showToast('请输入账号和密码')
       }
     },
     goRegister () {
       this.$router.push({ path: '/register' })
+    },
+    showToast(text) {
+      this.toastText = text
+      this.$refs.toast.show()
     }
   }
 }
@@ -91,27 +113,27 @@ export default {
       text-indent: px2rem(10);
       color: #7d8188;
     }
-    .login-button {
-      width: px2rem(200);
-      height: px2rem(40);
-      background-color: #346cb9;
-      color: #fff;
-      text-align: center;
-      border: none;
-      border-radius: px2rem(20);
-      text-decoration: none;
-      display: block;
-      font-size: px2rem(14);
-      margin-top: px2rem(20);
-      cursor: pointer;
-    }
+  }
+  .login-button {
+    width: px2rem(200);
+    height: px2rem(40);
+    background-color: #346cb9;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: px2rem(20);
+    text-decoration: none;
+    display: block;
+    font-size: px2rem(14);
+    margin: px2rem(20) auto px2rem(10);
+    cursor: pointer;
   }
   p {
     width: 380px;
     text-align: center;
     font-size: px2rem(14);
     color: #666;
-    margin: px2rem(10) auto;
+    margin: auto;
     span {
       color: #346cb9;
       text-decoration: underline;

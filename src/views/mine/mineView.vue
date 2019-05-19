@@ -1,30 +1,83 @@
 <template>
   <div class="mine">
     <div class="mine-title-wrapper">
-    <div class="title-right-wrapper">退出</div>
+    <div class="title-right-wrapper" @click="logout">退出</div>
     <div class="title-text">我的</div>
     </div>
     <div class="mine-content">
-      <div class="avatar">
-        <img src="" alt="">
+      <div class="avatar" :style="`background: url(${userInfo.avatar}) no-repeat center; background-size: cover;`" v-if="userInfo.avatar">
       </div>
-      <div class="base-info">账号：<span>{{username}}</span></div>
-      <div class="base-info">昵称：<span>{{nickname}}</span></div>
-      <div class="base-info">性别：<span>{{sex}}</span></div>
-      <!-- <div class="base-info">个人简介:{{personalProfile}}</div> -->
+      <div class="avatar" style="background-color: #ccc" v-else>
+      </div>
+      <button class="edit-button" @click="editInfo">修改个人资料</button>
+      <div class="base-info">账号：<span>{{userInfo.username}}</span></div>
+      <div class="base-info">昵称：<span>{{userInfo.nickname}}</span></div>
+      <div class="base-info">性别：<span>{{userInfo.sex}}</span></div>
+      <div class="base-info">出生日期：<span>{{userInfo.birth}}</span></div>
+      <div class="base-info intro">
+        <div class="">个人简介:
+        </div>
+        <div class="content">{{userInfo.intro}}</div>
+      </div>
     </div>
+    <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script>
+import { userInfo } from '@/api/book'
+import toast from '@/components/shelf/toast'
+import moment from 'moment'
 export default {
+  components: { toast },
   data () {
     return {
-      avatar: '',
-      username: 'ebook001',
-      nickname: '叉烧',
-      sex: '女'
+      userInfo: {
+        avatar: '',
+        username: '',
+        nickname: '',
+        sex: '',
+        birth: '',
+        intro: ''
+      },
+      toastText: ''
     }
+  },
+  methods: {
+    getUserInfo () {
+      const id = JSON.parse(sessionStorage.getItem('userInfo')).id
+      userInfo(id).then(res => {
+        console.log(res)
+        if (res.data.error_code === 0) {
+          this.userInfo = res.data.data
+          if (res.data.data.avatar) {
+            this.userInfo.avatar = process.env.VUE_APP_BASE_URL + this.userInfo.avatar
+          }
+          if (res.data.data.birth) {
+            if (moment(this.userInfo.birth).format('YYYY-MM-DD') === 'Invalid date') {
+              this.userInfo.birth = ''
+              return
+            }
+            this.userInfo.birth = moment(this.userInfo.birth).format('YYYY-MM-DD')
+          }
+        }
+      })
+    },
+    editInfo () {
+      this.$router.push({ path: `/completeInfo/${this.userInfo.id}` })
+    },
+    logout () {
+      this.showToast('退出成功')
+      this.$router.push({ path: '/login' })
+      sessionStorage.removeItem('userInfo')
+    },
+    showToast(text) {
+      this.toastText = text
+      this.$refs.toast.show()
+    }
+  },
+  mounted () {
+    this.getUserInfo()
   }
 }
 </script>
@@ -75,14 +128,28 @@ export default {
   .mine-content {
     // width: 100%;
     margin: 0 px2rem(20);
+    .edit-button {
+      width: px2rem(100);
+      height: px2rem(30);
+      background-color: #ccc;
+      color: #fff;
+      text-align: center;
+      border: none;
+      border-radius: px2rem(20);
+      text-decoration: none;
+      display: block;
+      font-size: px2rem(14);
+      margin: auto;
+      cursor: pointer;
+    }
     .avatar {
-      background-color: #ff0;
       width: px2rem(80);
       height: px2rem(80);
-      margin: px2rem(10) auto px2rem(30);
+      margin: px2rem(10) auto;
       border-radius: 50%;
-      .img {
+      img {
         width: 100%;
+        height: 100%;
       }
     }
     .base-info {
@@ -93,6 +160,16 @@ export default {
       line-height: px2rem(48);
       span {
         float: right;
+      }
+    }
+    .intro {
+      height: px2rem(96);
+      position: relative;
+      .content {
+        position: absolute;
+        top: px2rem(12);
+        left: px2rem(80);
+        line-height: px2rem(26);
       }
     }
   }

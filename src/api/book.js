@@ -2,10 +2,52 @@ import axios from 'axios'
 import { setLocalForage } from '@/utils/localForage'
 import { getCategoryName } from '@/utils/book'
 
+export function login(params) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_BOOK_URL}/login`,
+    data: params
+  })
+}
+
+export function register(params) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_BOOK_URL}/register`,
+    data: params
+  })
+}
+
+export function completeInfo(params) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_BOOK_URL}/completeInfo`,
+    data: params
+  })
+}
+
+export function userInfo(id) {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_BOOK_URL}/userInfo`,
+    params: {
+      id
+    }
+  })
+}
+
+export function upload(params) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_BOOK_URL}/avatareUpload`,
+    data: params
+  })
+}
+
 export function home2() {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_BOOK_URL}/book/home2`
+    url: `${process.env.VUE_APP_BOOK_URL}/book/home`
   })
 }
 
@@ -30,13 +72,6 @@ export function list() {
   return axios({
     method: 'get',
     url: `${process.env.VUE_APP_BASE_URL}/book/list`
-  })
-}
-
-export function home() {
-  return axios({
-    method: 'get',
-    url: `${process.env.VUE_APP_BASE_URL}/book/home`
   })
 }
 

@@ -208,7 +208,6 @@
           })
         }
         this.book.loaded.navigation.then(nav => { // 章节树形结构
-          console.log(nav)
           const navItem = (function flatten(arr) {
             return [].concat(...arr.map(v => [v, ...flatten(v.subitems)]))
           })(nav.toc)
@@ -236,7 +235,7 @@
         }).then(locations => {
           locations.forEach(location => {
             const loc = location.match(/\[(.*)\]!/)[1]
-            console.log(loc)
+            // console.log(loc)
             this.navigation.forEach(item => {
               if (item.idhref && item.idhref.indexOf(loc) >= 0) {
                 item.pagelist.push(location)

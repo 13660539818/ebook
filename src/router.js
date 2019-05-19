@@ -7,15 +7,15 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      component: resolve => require(['@/views/login/login.vue'], resolve)
+      component: () => import('@/views/login/login')
     },
     {
       path: '/register',
-      component: resolve => require(['@/views/login/register.vue'], resolve)
+      component: () => import('@/views/login/register')
     },
     {
-      path: '/completeInfo',
-      component: resolve => require(['@/views/login/completeInfo.vue'], resolve)
+      path: '/completeInfo/:id',
+      component: () => import('@/views/login/completeInfo')
     },
     // {
     //   path: '/layout',

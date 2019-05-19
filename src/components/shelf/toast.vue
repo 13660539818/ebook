@@ -48,14 +48,14 @@
 
   .toast-bg {
     position: absolute;
-    top: 50%;
+    top: 20%;
     left: 50%;
     margin: 0 0 0 -50%;
     z-index: 2500;
     width: 100%;
     @include center;
     .toast-wrapper {
-      width: 60%;
+      width: 50%;
       line-height: px2rem(20);
       padding: px2rem(10) px2rem(20);
       box-sizing: border-box;

@@ -13,31 +13,31 @@
                  :author="author"
                  :desc="desc"></book-info>
       <div class="book-detail-content-wrapper">
-        <div class="book-detail-content-title">{{$t('detail.copyright')}}</div>
+        <div class="book-detail-content-title">版权</div>
         <div class="book-detail-content-list-wrapper">
           <div class="book-detail-content-row">
-            <div class="book-detail-content-label">{{$t('detail.publisher')}}</div>
+            <div class="book-detail-content-label">出版社</div>
             <div class="book-detail-content-text">{{publisher}}</div>
           </div>
           <div class="book-detail-content-row">
-            <div class="book-detail-content-label">{{$t('detail.category')}}</div>
+            <div class="book-detail-content-label">分类</div>
             <div class="book-detail-content-text">{{categoryText}}</div>
           </div>
           <div class="book-detail-content-row">
-            <div class="book-detail-content-label">{{$t('detail.lang')}}</div>
+            <div class="book-detail-content-label">语言</div>
             <div class="book-detail-content-text">{{lang}}</div>
           </div>
           <div class="book-detail-content-row">
-            <div class="book-detail-content-label">{{$t('detail.ISBN')}}</div>
+            <div class="book-detail-content-label">ISBN</div>
             <div class="book-detail-content-text">{{isbn}}</div>
           </div>
         </div>
       </div>
       <div class="book-detail-content-wrapper">
-        <div class="book-detail-content-title">{{$t('detail.navigation')}}</div>
+        <div class="book-detail-content-title">目录</div>
         <div class="book-detail-content-list-wrapper">
           <div class="loading-text-wrapper" v-if="!this.navigation">
-            <span class="loading-text">{{$t('detail.loading')}}</span>
+            <span class="loading-text">加载中</span>
           </div>
           <div class="book-detail-content-item-wrapper">
             <div class="book-detail-content-item" v-for="(item, index) in flatNavigation" :key="index"
@@ -52,21 +52,21 @@
         </div>
       </div>
       <div class="book-detail-content-wrapper">
-        <div class="book-detail-content-title">{{$t('detail.trial')}}</div>
+        <div class="book-detail-content-title">试读</div>
         <div class="book-detail-content-list-wrapper">
           <div class="loading-text-wrapper" v-if="!this.displayed">
-            <span class="loading-text">{{$t('detail.loading')}}</span>
+            <span class="loading-text">加载中...</span>
           </div>
         </div>
         <div id="preview" v-show="this.displayed" ref="preview"></div>
       </div>
     </scroll>
     <div class="bottom-wrapper">
-      <div class="bottom-btn" @click.stop.prevent="readBook()">{{$t('detail.read')}}</div>
-      <div class="bottom-btn" @click.stop.prevent="trialListening()">{{$t('detail.listen')}}</div>
+      <div class="bottom-btn" @click.stop.prevent="readBook()">阅读</div>
+      <div class="bottom-btn" @click.stop.prevent="trialListening()">听书</div>
       <div class="bottom-btn" @click.stop.prevent="addOrRemoveShelf()">
         <span class="icon-check" v-if="inBookShelf"></span>
-        {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
+        {{inBookShelf ? '已加入书架' : '加入书架'}}
       </div>
     </div>
     <toast :text="toastText" ref="toast"></toast>
@@ -270,8 +270,9 @@
         this.book.loaded.navigation.then(nav => {
           this.navigation = nav
           if (this.navigation.toc && this.navigation.toc.length > 1) {
-            this.display(this.navigation.toc[1].href)
-              .then(section => {
+            const candisplay = this.display(this.navigation.toc[1].href)
+            if (candisplay) {
+              candisplay.then(section => {
                 if (this.$refs.scroll) {
                   this.$refs.scroll.refresh()
                 }
@@ -280,6 +281,7 @@
                 const text = section.output.replace(reg, '').replace(/\s\s/g, '')
                 this.description = text
               })
+            }
           }
         })
       },
