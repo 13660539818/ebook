@@ -2,6 +2,7 @@
   <div class="book-detail">
     <detail-title @back="back"
                   :showShelf="true"
+                  :title="title"
                   ref="title"></detail-title>
     <scroll class="content-wrapper"
             :top="42"
@@ -74,7 +75,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import DetailTitle from '@/components/detail/detaiTitle'
+  import DetailTitle from '@/components/detail/detailTitle'
   import BookInfo from '@/components/detail/bookInfo'
   import Scroll from '@/components/Scroll'
   import Toast from '@/components/shelf/toast'

@@ -74,13 +74,19 @@
     .title-text {
       position: absolute;
       top: 0;
-      left: 0;
+      left: 50%;
       z-index: 100;
-      width: 100%;
+      width: 50%;
+      margin-left: -20%;
       height: px2rem(42);
+      line-height: px2rem(42);
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
       font-size: px2rem(16);
+      font-weight: bold;
       color: #333;
-      @include center;
+      // @include center;
     }
   }
 </style>

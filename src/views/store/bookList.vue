@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import DetailTitle from '@/components/detail/detaiTitle'
+  import DetailTitle from '@/components/detail/detailTitle'
   import Scroll from '@/components/Scroll'
   import Featured from '@/components/home/featured'
   import { realPx } from '@/utils/utils'

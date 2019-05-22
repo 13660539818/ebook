@@ -47,6 +47,7 @@
   import ShelfImage from '@/components/shelf/shelfImage'
   import { realPx } from '@/utils/utils'
   import { flatBookList } from '@/utils/book'
+  import { mapActions } from 'vuex'
 
   export default {
     props: {
@@ -124,6 +125,9 @@
       }
     },
     methods: {
+      ...mapActions([
+        'setTabbarSelected'
+      ]),
       fixTitle(offsetY) {
         if (this.showType === 2 || this.showType === 3) {
           if (offsetY > realPx(10) && offsetY < this.bookShelfList) {
@@ -147,6 +151,7 @@
       },
       onBookClick(item, index) {
         if (item.type === 3) {
+          this.setTabbarSelected(2)
           this.$router.push('/book-store/home')
         } else if (item.type === 1) {
           if (this.isEditMode) {
