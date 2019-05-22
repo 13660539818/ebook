@@ -461,6 +461,8 @@
     font-size: px2rem(16);
     width: 100%;
     background: white;
+    z-index: 200;
+    position: relative;
     .content-wrapper {
       width: 100%;
       .book-speak-title-wrapper {
