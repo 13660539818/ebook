@@ -2,6 +2,7 @@ import { realPx } from '../../utils/utils'
 
 const book = {
   state: {
+    tabbarSelected: 1, // 1:书架, 2:书城, 3:我的
     fileName: '',
     menuVisible: false,
     settingVisible: -1, // -1:不显示,0:字号,1:主题,2:进度,3:目录
@@ -24,6 +25,9 @@ const book = {
     speakingIconBottom: realPx(58)
   },
   mutations: {
+    'SET_TABBARSELECTED': (state, tabbarSelected) => {
+      state.tabbarSelected = tabbarSelected
+    },
     'SET_FILENAME': (state, fileName) => {
       state.fileName = fileName
     },

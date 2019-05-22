@@ -1,4 +1,7 @@
 const actions = {
+  setTabbarSelected: ({ commit }, tabbarSelected) => {
+    return commit('SET_TABBARSELECTED', tabbarSelected)
+  },
   setFontFamilyVisible: ({ commit }, visible) => {
     return commit('SET_FONT_FAMILY_VISIBLE', visible)
   },

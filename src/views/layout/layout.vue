@@ -10,7 +10,7 @@
       <div class="shelf" @click="select('shelf')">
         <div
           class="icon-container"
-          v-if="selected === 1"
+          v-if="tabbarSelected === 1"
         >
           <img
             src="../../assets/images/icon/iconkuozhan_shuchengpre.png"
@@ -31,7 +31,7 @@
       <div class="store" @click="select('store')">
         <div
           class="icon-container"
-          v-if="selected === 2"
+          v-if="tabbarSelected === 2"
         >
           <img
             src="../../assets/images/icon/iconkuozhan_shujiapre.png"
@@ -52,7 +52,7 @@
       <div class="mine" @click="select('mine')">
         <div
           class="icon-container"
-          v-if="selected === 3"
+          v-if="tabbarSelected === 3"
         >
           <img
             src="../../assets/images/icon/iconkuozhan_wodepre-.png"
@@ -76,26 +76,29 @@
 
 <script>
 import { os } from '@/utils/utils'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      transitionName: '',
-      selected: 1
+      transitionName: ''
     }
   },
   methods: {
+    ...mapActions([
+      'setTabbarSelected'
+    ]),
     select (menu) {
       switch (menu) {
         case 'shelf':
-          this.selected = 1
+          this.setTabbarSelected(1)
           this.$router.push({ path: '/book-store/shelf' })
           break
         case 'store':
-          this.selected = 2
+          this.setTabbarSelected(2)
           this.$router.push({ path: '/book-store/home' })
           break
         case 'mine':
-          this.selected = 3
+          this.setTabbarSelected(3)
           this.$router.push({ path: '/mine' })
           break
       }
@@ -104,7 +107,10 @@ export default {
   computed: {
     os() {
       return os()
-    }
+    },
+    ...mapGetters([
+      'tabbarSelected'
+    ])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
