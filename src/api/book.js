@@ -44,6 +44,14 @@ export function upload(params) {
   })
 }
 
+export function saveBookShelf(params) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_BOOK_URL}/saveBookShelf`,
+    data: params
+  })
+}
+
 export function home2() {
   return axios({
     method: 'get',
@@ -75,10 +83,13 @@ export function list() {
   })
 }
 
-export function shelf() {
+export function shelf(userid) {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_BASE_URL}/book/shelf`
+    url: `${process.env.VUE_APP_BASE_URL}/book/shelf`,
+    params: {
+      userid
+    }
   })
 }
 

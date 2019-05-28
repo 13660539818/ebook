@@ -65,7 +65,7 @@ export default {
   data () {
     return {
       form: {
-        id: '',
+        username: '',
         nickname: '',
         sex: '',
         birth: '',
@@ -81,11 +81,11 @@ export default {
       this.$router.go(-1)
     },
     saveInfo () {
-      this.form.id = JSON.parse(sessionStorage.getItem('userInfo')).id
+      this.form.username = this.$route.params.id
+      console.log(this.form)
       completeInfo(this.form).then(res => {
         this.showToast(res.data.msg)
         if (res.data.error_code === 0) {
-          console.log(res.data)
           if (sessionStorage.getItem('userInfo')) {
             this.$router.push({ path: '/mine' })
           } else {

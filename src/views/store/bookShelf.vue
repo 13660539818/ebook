@@ -364,9 +364,11 @@
       },
       getBookShelf() {
         this.bookList = this.getBookShelfFromLocalStorage()
+        const userid = JSON.parse(sessionStorage.getItem('userInfo')).id
         if (!this.bookList) {
-          shelf().then(response => {
+          shelf(userid).then(response => {
             this.bookList = response.data.bookList
+            console.log(this.bookList)
             if (!this.bookList) {
               this.bookList = []
             }

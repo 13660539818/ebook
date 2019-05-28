@@ -25,7 +25,7 @@
       <div class="book-detail-content-wrapper" v-show="ifShowContent">
         <div class="book-detail-content-list-wrapper">
           <div class="loading-text-wrapper" v-if="!this.navigation">
-            <span class="loading-text">{{$t('detail.loading')}}</span>
+            <span class="loading-text">加载中...</span>
           </div>
           <div class="book-detail-content-item-wrapper">
             <div class="book-detail-content-item" v-for="(item, index) in flatNavigation" :key="index"
@@ -346,14 +346,6 @@
               text = text.replace(/\f/g, '')
               this.updateText(text)
             })
-            // const reg = new RegExp('<.+?>', 'g')
-            // let text = section.output.replace(reg, '').replace(/\s\s/g, '')
-            // text = text.replace(/\s(2,)/g, '')
-            // text = text.replace(/\r/g, '')
-            // text = text.replace(/\n/g, '')
-            // text = text.replace(/\t/g, '')
-            // text = text.replace(/\f/g, '')
-            // this.updateText(text)
           })
         }
       },

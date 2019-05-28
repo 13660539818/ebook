@@ -25,9 +25,10 @@
 </template>
 
 <script>
-import { userInfo } from '@/api/book'
+import { userInfo, saveBookShelf } from '@/api/book'
 import toast from '@/components/shelf/toast'
 import moment from 'moment'
+import { getLocalStorage, removeLocalStorage } from '@/utils/localStorage'
 export default {
   components: { toast },
   data () {
@@ -64,12 +65,30 @@ export default {
       })
     },
     editInfo () {
-      this.$router.push({ path: `/completeInfo/${this.userInfo.id}` })
+      const username = JSON.parse(sessionStorage.getItem('userInfo')).account
+      this.$router.push({ path: `/completeInfo/${username}` })
     },
     logout () {
-      this.showToast('退出成功')
+      const userid = JSON.parse(sessionStorage.getItem('userInfo')).id
+      let bookshelf = []
+      getLocalStorage('bookShelf').forEach((item, index) => {
+        if (item.bookId) {
+          bookshelf.push(item)
+        }
+      })
+      const bookShelf = JSON.stringify(bookshelf)
+      const params = {
+        userid,
+        bookShelf,
+        readingBook: ''
+      }
+      saveBookShelf(params).then(res => {
+        console.log(res)
+      })
       this.$router.push({ path: '/login' })
       sessionStorage.removeItem('userInfo')
+      removeLocalStorage('bookShelf')
+      this.showToast('退出成功')
     },
     showToast(text) {
       this.toastText = text

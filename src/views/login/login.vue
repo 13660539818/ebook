@@ -30,6 +30,7 @@
 
 <script>
 import { login } from '@/api/book'
+import { mapActions } from 'vuex'
 import toast from '@/components/shelf/toast'
 export default {
   components: { toast },
@@ -41,6 +42,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setTabbarSelected'
+    ]),
     login () {
       if (this.username && this.password) {
         const params = {
@@ -51,6 +55,7 @@ export default {
           if (res.data.error_code === 0) {
             sessionStorage.setItem('userInfo', JSON.stringify(res.data.data))
             this.showToast(res.data.msg)
+            this.setTabbarSelected(1)
             this.$router.push({ path: '/book-store/shelf' })
           } else {
             this.showToast(res.data.msg)

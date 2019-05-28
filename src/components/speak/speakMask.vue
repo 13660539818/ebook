@@ -6,7 +6,7 @@
           <div class="pulldown-icon-wrapper" @click="hide">
             <span class="icon-pull_down"></span>
           </div>
-          <div class="card-title-wrapper">
+          <!-- <div class="card-title-wrapper">
             <div class="icon-speak-wrapper">
               <span class="icon-speak"></span>
             </div>
@@ -16,7 +16,7 @@
             <div class="read-fulltext-wrapper">
               <span class="read-fulltext">{{$t('speak.read')}}</span>
             </div>
-          </div>
+          </div> -->
           <div class="card-section-title-wrapper">
             <div class="card-section-title-text">{{title}}</div>
             <div class="card-section-sub-title-text" v-if="currentSectionIndex">{{currentSectionIndex}} /
@@ -44,10 +44,10 @@
             </div>
           </div>
           <div class="playing-wrapper">
-            <div class="icon-settings-wrapper">
+            <!-- <div class="icon-settings-wrapper">
               <span class="icon-settings"></span>
               <div class="settings-text">{{$t('speak.settings')}}</div>
-            </div>
+            </div> -->
             <span class="icon-play_backward" :class="{'not-use': currentSectionIndex <= 1}" @click.stop.prevent="prev"></span>
             <div class="icon-play-wrapper" @click.stop.prevent="togglePlay">
               <span class="icon-play_go" v-if="!isPlaying"></span>
@@ -55,14 +55,14 @@
             </div>
             <span class="icon-play_forward" :class="{'not-use': currentSectionIndex >= currentSectionTotal}"
                   @click.stop.prevent="next"></span>
-            <div class="icon-clock-wrapper">
+            <!-- <div class="icon-clock-wrapper">
               <span class="icon-clock"></span>
               <div class="clock-text">{{$t('speak.timing')}}</div>
-            </div>
+            </div> -->
           </div>
-          <div class="read-apply-wrapper">
+          <!-- <div class="read-apply-wrapper">
             {{$t('speak.apply')}}
-          </div>
+          </div> -->
           <div class="read-title-wrapper">
             <span class="line"></span>
             <div class="read-title-text">{{$t('speak.current')}}</div>
@@ -314,7 +314,7 @@
       }
       .playing-wrapper {
         width: 100%;
-        height: px2rem(60);
+        height: px2rem(48);
         @include center;
         .icon-settings-wrapper {
           flex: 1;
@@ -387,6 +387,7 @@
       }
       .read-title-wrapper {
         width: 100%;
+        margin-top: px2rem(10);
         height: px2rem(24);
         box-sizing: border-box;
         @include center;

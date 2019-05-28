@@ -22,7 +22,7 @@
     <ebook-setting-theme></ebook-setting-theme>
     <ebook-setting-progress></ebook-setting-progress>
     <ebook-slide></ebook-slide>
-    <ebook-speaking-icon></ebook-speaking-icon>
+    <!-- <ebook-speaking-icon></ebook-speaking-icon> -->
   </div>
 </template>
 
